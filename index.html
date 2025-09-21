@@ -61,6 +61,11 @@ button:hover { background: #0056b3; }
   margin-top: 10px;
   background: #dc3545;
 }
+#copySummaryBtn {
+  margin-top: 10px;
+  background: #28a745;
+}
+#copySummaryBtn:hover { background: #218838; }
 @media (max-width: 600px) {
   body { padding: 10px; }
   input, select, button { font-size: 14px; padding: 10px; }
@@ -115,6 +120,7 @@ button:hover { background: #0056b3; }
 
     <button type="button" onclick="addEntry()">Add Entry</button>
     <button type="button" id="clearAllBtn" onclick="clearAll()">Remove All Entries</button>
+    <button type="button" id="copySummaryBtn" onclick="copySummary()">Copy Summary</button>
   </form>
 
   <div class="output" id="output"><strong>Summary will appear here...</strong></div>
@@ -173,6 +179,9 @@ function renderSummary() {
   weekTitle.innerHTML = `<strong>Week: ${formatDate(weekStart)} - ${formatDate(weekEnd)}</strong><br>`;
   container.appendChild(weekTitle);
 
+  // Sort entries by date
+  entries.sort((a,b) => new Date(a.date) - new Date(b.date));
+
   entries.forEach((e, idx) => {
     const div = document.createElement('div');
     div.className = 'entry';
@@ -223,6 +232,15 @@ function clearAll() {
     entries = [];
     renderSummary();
   }
+}
+
+// Copy summary to clipboard
+function copySummary() {
+  const container = document.getElementById('output');
+  const text = container.innerText;
+  navigator.clipboard.writeText(text)
+    .then(() => alert('Summary copied to clipboard!'))
+    .catch(() => alert('Failed to copy.'));
 }
 
 // render saved entries on page load
