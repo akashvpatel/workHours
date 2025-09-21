@@ -5,66 +5,66 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Work Hours Tracker</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 15px;
-    background: #f8f9fa;
-  }
-  h2 { text-align: center; color: #333; margin-bottom: 15px; }
-  .form-container {
-    max-width: 600px;
-    margin: auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  label { display: block; margin: 10px 0 5px; font-weight: bold; color: #555; }
-  input, select, button {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-  }
-  button {
-    background: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  button:hover { background: #0056b3; }
-  .output {
-    margin-top: 20px;
-    padding: 15px;
-    background: #e9ecef;
-    border-radius: 8px;
-    font-size: 15px;
-    line-height: 1.5;
-  }
-  .entry {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
-    align-items: center;
-  }
-  .entry button {
-    width: auto;
-    padding: 5px 10px;
-    font-size: 12px;
-    background: #ff6b6b;
-  }
-  .entry button:hover { background: #ff4c4c; }
-  #clearAllBtn {
-    margin-top: 10px;
-    background: #dc3545;
-  }
-  @media (max-width: 600px) {
-    body { padding: 10px; }
-    input, select, button { font-size: 14px; padding: 10px; }
-  }
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 15px;
+  background: #f8f9fa;
+}
+h2 { text-align: center; color: #333; margin-bottom: 15px; }
+.form-container {
+  max-width: 600px;
+  margin: auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+label { display: block; margin: 10px 0 5px; font-weight: bold; color: #555; }
+input, select, button {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+button {
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+button:hover { background: #0056b3; }
+.output {
+  margin-top: 20px;
+  padding: 15px;
+  background: #e9ecef;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.entry {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  align-items: center;
+}
+.entry button {
+  width: auto;
+  padding: 5px 10px;
+  font-size: 12px;
+  background: #ff6b6b;
+}
+.entry button:hover { background: #ff4c4c; }
+#clearAllBtn {
+  margin-top: 10px;
+  background: #dc3545;
+}
+@media (max-width: 600px) {
+  body { padding: 10px; }
+  input, select, button { font-size: 14px; padding: 10px; }
+}
 </style>
 </head>
 <body>
@@ -92,6 +92,14 @@
     <label for="date">Date</label>
     <input type="date" id="date" required>
 
+    <label for="shift">Shift</label>
+    <select id="shift" onchange="setShiftTime()" required>
+      <option value="">Select Shift</option>
+      <option value="morning">Morning (07:00–15:00)</option>
+      <option value="afternoon">Afternoon (15:00–23:00)</option>
+      <option value="night">Night (23:00–07:00)</option>
+    </select>
+
     <label for="startTime">Start Time</label>
     <input type="time" id="startTime" value="07:00" required>
 
@@ -115,19 +123,26 @@
 <script>
 let entries = JSON.parse(localStorage.getItem('workEntries')) || [];
 
+function setShiftTime() {
+  const shift = document.getElementById('shift').value;
+  if(shift === 'morning') { document.getElementById('startTime').value='07:00'; document.getElementById('endTime').value='15:00'; }
+  else if(shift === 'afternoon') { document.getElementById('startTime').value='15:00'; document.getElementById('endTime').value='23:00'; }
+  else if(shift === 'night') { document.getElementById('startTime').value='23:00'; document.getElementById('endTime').value='07:00'; }
+}
+
 function calculateHours(start, end) {
   const [sh, sm] = start.split(':').map(Number);
   const [eh, em] = end.split(':').map(Number);
-  let startMin = sh * 60 + sm;
-  let endMin = eh * 60 + em;
-  if(endMin <= startMin) endMin += 24*60; // overnight shift
+  let startMin = sh*60 + sm;
+  let endMin = eh*60 + em;
+  if(endMin <= startMin) endMin += 24*60;
   return (endMin - startMin)/60;
 }
 
 function renderSummary() {
   const container = document.getElementById('output');
   container.innerHTML = '';
-  if(entries.length === 0) {
+  if(entries.length === 0) { 
     container.innerHTML = '<strong>Summary will appear here...</strong>';
     localStorage.removeItem('workEntries');
     return;
@@ -165,14 +180,15 @@ function addEntry() {
   const start = document.getElementById('startTime').value;
   const end = document.getElementById('endTime').value;
   const location = document.getElementById('location').value;
+  const shift = document.getElementById('shift').value;
 
-  if(!weekStart || !weekEnd || !day || !date || !start || !end || !location){
+  if(!weekStart || !weekEnd || !day || !date || !start || !end || !location || !shift){
     alert("Please fill all fields.");
     return;
   }
 
   const hours = calculateHours(start, end);
-  entries.push({day, date, start, end, hours, location});
+  entries.push({day, date, start, end, hours, location, shift});
   renderSummary();
   document.getElementById('hoursForm').reset();
   document.getElementById('startTime').value = "07:00";
@@ -191,7 +207,7 @@ function clearAll() {
   }
 }
 
-// Render saved entries on page load
+// render saved entries on page load
 renderSummary();
 </script>
 </body>
