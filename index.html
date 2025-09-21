@@ -1,186 +1,148 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Work Hours</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Work Hours Tracker</title>
   <style>
-    :root {
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
-      margin: 0;
-    }
     body {
-      padding: 20px;
-      background: #f6f7fb;
-      color: #111;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 15px;
+      background: #f8f9fa;
     }
-    .card {
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 15px;
+    }
+    .form-container {
+      max-width: 600px;
+      margin: auto;
       background: #fff;
-      border-radius: 10px;
-      padding: 18px;
-      box-shadow: 0 6px 20px rgba(19,24,40,0.06);
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    h1 {
-      margin: 0 0 12px;
-      font-size: 22px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     label {
       display: block;
-      font-size: 13px;
-      margin-top: 8px;
+      margin: 10px 0 5px;
+      font-weight: bold;
+      color: #555;
     }
-    .row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    input,select,button {
-      padding: 10px 12px;
-      border-radius: 6px;
-      border: 1px solid #d7dbe6;
-      background: #fff;
-      font-size: 14px;
+    input, select, button {
       width: 100%;
-      box-sizing: border-box;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
     }
-    .actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-    .actions button {
-      flex: 1;
-      min-width: 120px;
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
       cursor: pointer;
     }
-    .btn-primary { background:#1f6feb; color:#fff; border:none }
-    .btn-danger { background:#ff6b6b; color:#fff; border:none }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-      font-size: 14px;
-    }
-    th,td {
-      padding: 8px;
-      border-bottom: 1px solid #eef1f6;
-      text-align: left;
-      white-space: nowrap;
-    }
-    .table-wrapper {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .muted {
-      color:#556;
-      font-size:13px;
+    button:hover {
+      background: #0056b3;
     }
     .output {
-      white-space:pre-wrap;
-      background:#f1f5ff;
-      padding:12px;
-      border-radius:8px;
-      margin-top:12px;
-      border:1px dashed #dbe6ff;
-      font-size: 13px;
+      margin-top: 20px;
+      padding: 15px;
+      background: #e9ecef;
+      border-radius: 8px;
+      font-size: 15px;
+      line-height: 1.5;
     }
-    @media (max-width:640px) {
-      h1 { font-size: 18px; }
-      .row { flex-direction: column; }
-      th, td { font-size: 12px; }
-      .actions button { min-width: unset; }
+    /* Make layout mobile responsive */
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+      input, select, button {
+        font-size: 14px;
+        padding: 10px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Work Hours</h1>
-    <p class="muted">Add shifts (day, date, start & end time, place)</p>
+  <div class="form-container">
+    <h2>Work Hours Tracker</h2>
+    <form id="hoursForm">
+      <label for="weekStart">Week Start Date</label>
+      <input type="date" id="weekStart" required>
 
-    <div class="row" style="align-items:center;margin-top:8px">
-      <div>
-        <label for="date">Date</label>
-        <input id="date" type="date" />
-      </div>
-      <div>
-        <label for="day">Day</label>
-        <select id="day">
-          <option value="auto">(auto from date)</option>
-          <option>Monday</option>
-          <option>Tuesday</option>
-          <option>Wednesday</option>
-          <option>Thursday</option>
-          <option>Friday</option>
-          <option>Saturday</option>
-          <option>Sunday</option>
-        </select>
-      </div>
-      <div>
-        <label for="start">Start time</label>
-        <input id="start" type="time" />
-      </div>
-      <div>
-        <label for="end">End time</label>
-        <input id="end" type="time" />
-      </div>
-      <div>
-        <label for="shift">Shift type</label>
-        <select id="shift">
-          <option>Morning shift</option>
-          <option>Afternoon shift</option>
-          <option>Night shift</option>
-        </select>
-      </div>
-      <div>
-        <label for="place">Place</label>
-        <select id="place">
-          <option>Bakery</option>
-          <option>Warehouse</option>
-        </select>
-      </div>
-    </div>
+      <label for="weekEnd">Week End Date</label>
+      <input type="date" id="weekEnd" required>
 
-    <div class="actions">
-      <button id="add" class="btn-primary">Add entry</button>
-      <button id="clearAll" class="btn-danger">Clear all</button>
-      <button id="copy" title="Copy formatted text">Copy text</button>
-      <button id="download" title="Download as .txt">Download .txt</button>
-    </div>
+      <label for="day">Day</label>
+      <select id="day" required>
+        <option value="">Select Day</option>
+        <option>Monday</option>
+        <option>Tuesday</option>
+        <option>Wednesday</option>
+        <option>Thursday</option>
+        <option>Friday</option>
+        <option>Saturday</option>
+        <option>Sunday</option>
+      </select>
 
-    <div class="table-wrapper">
-      <table id="entriesTable" style="display:none">
-        <thead>
-          <tr><th>Date</th><th>Day</th><th>Time</th><th>Shift</th><th>Place</th><th>Hours</th><th></th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+      <label for="date">Date</label>
+      <input type="date" id="date" required>
 
-    <div id="summary" style="margin-top:12px;display:none">
-      <strong>Total working hours:</strong> <span id="totalHours">0</span> hours
-      <div class="output" id="formattedOutput"></div>
+      <label for="hours">Hours Worked</label>
+      <input type="number" id="hours" min="1" required>
+
+      <label for="shift">Shift</label>
+      <input type="text" id="shift" placeholder="e.g., 7 am to 3 pm">
+
+      <label for="location">Location</label>
+      <select id="location" required>
+        <option value="">Select Location</option>
+        <option>Bakery</option>
+        <option>Warehouse</option>
+      </select>
+
+      <button type="button" onclick="addEntry()">Add Entry</button>
+    </form>
+
+    <div class="output" id="output">
+      <strong>Summary will appear here...</strong>
     </div>
   </div>
 
   <script>
-    // JavaScript unchanged (your same logic)
-    const $ = id => document.getElementById(id);
     let entries = [];
-    function to12Hour(t){if(!t)return'';const[hh,mm]=t.split(':').map(Number);const ampm=hh>=12?'pm':'am';const h12=((hh+11)%12)+1;return h12+(mm?':'+String(mm).padStart(2,'0'):'')+' '+ampm;}
-    function minutesBetween(s,e){const[sh,sm]=s.split(':').map(Number);const[eh,em]=e.split(':').map(Number);let st=sh*60+sm;let en=eh*60+em;if(en<=st)en+=1440;return en-st;}
-    function formatDateShort(d){const dt=new Date(d);return String(dt.getDate()).padStart(2,'0')+'/'+String(dt.getMonth()+1).padStart(2,'0');}
-    function getDayNameFromDate(d){return new Date(d).toLocaleDateString(undefined,{weekday:'long'});}
-    function render(){const tbody=document.querySelector('#entriesTable tbody');tbody.innerHTML='';if(entries.length===0){$('entriesTable').style.display='none';$('summary').style.display='none';return;}
-      $('entriesTable').style.display='';let totalMin=0;entries.forEach((en,idx)=>{const tr=document.createElement('tr');const hrs=(en.minutes/60);totalMin+=en.minutes;tr.innerHTML=`<td>${en.dateFormatted}</td><td>${en.day}</td><td>${to12Hour(en.start)} to ${to12Hour(en.end)}</td><td>${en.shift}</td><td>${en.place}</td><td>${hrs.toFixed(2)}</td><td><button data-idx='${idx}'>Remove</button></td>`;tbody.appendChild(tr);});
-      $('totalHours').innerText=(totalMin/60).toFixed(2);$('summary').style.display='';const lines=[];entries.forEach(en=>{lines.push(`${en.day} (${en.dateShort}) : ${(en.minutes/60).toFixed(0)} hours (${to12Hour(en.start)} to ${to12Hour(en.end)}), ${en.shift}, ${en.place}`);});lines.push('\\nTotal working hours are '+(totalMin/60).toFixed(0)+' hours.');$('formattedOutput').innerText=lines.join('\\n');document.querySelectorAll('#entriesTable button[data-idx]').forEach(btn=>{btn.addEventListener('click',e=>{entries.splice(Number(e.target.dataset.idx),1);render();});});}
-    $('date').addEventListener('change',e=>{const v=e.target.value;if(!v)return;if($('day').value==='auto'||$('day').value===''){const dayName=getDayNameFromDate(v);const opt=Array.from($('day').options).find(o=>o.value===dayName);if(opt)$('day').value=dayName;else{const extra=document.createElement('option');extra.text=dayName;extra.value=dayName;extra.selected=true;$('day').appendChild(extra);}}});
-    $('add').addEventListener('click',()=>{const date=$('date').value;const start=$('start').value;const end=$('end').value;const shift=$('shift').value;const place=$('place').value;let day=$('day').value;if(!date||!start||!end){alert('Please pick date, start and end times.');return;}if(day==='auto')day=getDayNameFromDate(date);const entry={dateISO:date,dateFormatted:new Date(date).toLocaleDateString(),dateShort:formatDateShort(date),day,start,end,shift,place,minutes:minutesBetween(start,end)};entries.push(entry);render();});
-    $('clearAll').addEventListener('click',()=>{if(confirm('Clear all entries?')){entries=[];render();}});
-    $('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('formattedOutput').innerText);alert('Copied to clipboard');}catch(e){alert('Copy failed — select and Ctrl+C');}});
-    $('download').addEventListener('click',()=>{const text=$('formattedOutput').innerText;const blob=new Blob([text],{type:'text/plain'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='work-hours.txt';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);});
+
+    function addEntry() {
+      const weekStart = document.getElementById('weekStart').value;
+      const weekEnd = document.getElementById('weekEnd').value;
+      const day = document.getElementById('day').value;
+      const date = document.getElementById('date').value;
+      const hours = document.getElementById('hours').value;
+      const shift = document.getElementById('shift').value;
+      const location = document.getElementById('location').value;
+
+      if (!weekStart || !weekEnd || !day || !date || !hours || !shift || !location) {
+        alert("Please fill all fields.");
+        return;
+      }
+
+      entries.push({ day, date, hours, shift, location });
+
+      let totalHours = entries.reduce((sum, entry) => sum + parseFloat(entry.hours), 0);
+
+      let summary = `<strong>Week: ${weekStart} - ${weekEnd}</strong><br>`;
+      entries.forEach(e => {
+        summary += `${e.day} (${e.date}): ${e.hours} hours (${e.shift}), ${e.location}<br>`;
+      });
+      summary += `<br><strong>Total working hours: ${totalHours}</strong>`;
+
+      document.getElementById('output').innerHTML = summary;
+      document.getElementById('hoursForm').reset();
+    }
   </script>
 </body>
 </html>
