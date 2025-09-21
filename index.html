@@ -95,9 +95,9 @@ button:hover { background: #0056b3; }
     <label for="shift">Shift</label>
     <select id="shift" onchange="setShiftTime()" required>
       <option value="">Select Shift</option>
-      <option value="morning">Morning (07:00–15:00)</option>
-      <option value="afternoon">Afternoon (15:00–23:00)</option>
-      <option value="night">Night (23:00–07:00)</option>
+      <option value="morning">Morning</option>
+      <option value="afternoon">Afternoon</option>
+      <option value="night">Night</option>
     </select>
 
     <label for="startTime">Start Time</label>
@@ -123,11 +123,29 @@ button:hover { background: #0056b3; }
 <script>
 let entries = JSON.parse(localStorage.getItem('workEntries')) || [];
 
+// Auto-set time based on shift
 function setShiftTime() {
   const shift = document.getElementById('shift').value;
   if(shift === 'morning') { document.getElementById('startTime').value='07:00'; document.getElementById('endTime').value='15:00'; }
   else if(shift === 'afternoon') { document.getElementById('startTime').value='15:00'; document.getElementById('endTime').value='23:00'; }
   else if(shift === 'night') { document.getElementById('startTime').value='23:00'; document.getElementById('endTime').value='07:00'; }
+}
+
+// Convert 24h to 12h
+function to12Hour(time) {
+  const [h,m] = time.split(':').map(Number);
+  const ampm = h >=12 ? 'PM':'AM';
+  const h12 = ((h+11)%12)+1;
+  return h12 + ':' + String(m).padStart(2,'0') + ' ' + ampm;
+}
+
+// Format date as dd Mon yyyy
+function formatDate(d) {
+  const dt = new Date(d);
+  const day = String(dt.getDate()).padStart(2,'0');
+  const month = dt.toLocaleString('default',{month:'short'});
+  const year = dt.getFullYear();
+  return `${day} ${month} ${year}`;
 }
 
 function calculateHours(start, end) {
@@ -152,14 +170,14 @@ function renderSummary() {
   const weekEnd = document.getElementById('weekEnd').value;
   let totalHours = 0;
   const weekTitle = document.createElement('div');
-  weekTitle.innerHTML = `<strong>Week: ${weekStart} - ${weekEnd}</strong><br>`;
+  weekTitle.innerHTML = `<strong>Week: ${formatDate(weekStart)} - ${formatDate(weekEnd)}</strong><br>`;
   container.appendChild(weekTitle);
 
   entries.forEach((e, idx) => {
     const div = document.createElement('div');
     div.className = 'entry';
     const hours = e.hours.toFixed(2);
-    div.innerHTML = `${e.day} (${e.date}): ${hours} hours (${e.start} to ${e.end}), ${e.location} <button onclick="removeEntry(${idx})">Remove</button>`;
+    div.innerHTML = `${e.day} (${formatDate(e.date)}): ${hours} hours (${to12Hour(e.start)} to ${to12Hour(e.end)}), ${e.shift}, ${e.location} <button onclick="removeEntry(${idx})">Remove</button>`;
     container.appendChild(div);
     totalHours += e.hours;
   });
