@@ -1,27 +1,10 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	<title></title>
-	<meta name="generator" content="LibreOffice 24.8.1.2 (Linux)"/>
-	<meta name="created" content="00:00:00"/>
-	<meta name="changed" content="00:00:00"/>
-	<style type="text/css">
-		@page { size: 8.27in 11.69in; margin: 0.79in }
-		p { line-height: 115%; margin-bottom: 0.1in; background: transparent }
-		pre { background: transparent }
-		pre.western { font-family: "Liberation Mono", monospace; font-size: 10pt }
-		pre.cjk { font-family: "NSimSun", monospace; font-size: 10pt }
-		pre.ctl { font-family: "Liberation Mono", monospace; font-size: 10pt }
-	</style>
-</head>
-<body lang="en-US" link="#000080" vlink="#800000" dir="ltr"><pre class="western">&lt;!doctype html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-  &lt;meta charset=&quot;utf-8&quot; /&gt;
-  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot; /&gt;
-  &lt;title&gt;Work Hours &lt;/title&gt;
-  &lt;style&gt;
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Work Hours </title>
+  <style>
     :root{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial;margin:0}
     body{padding:20px;background:#f6f7fb;color:#111}
     .card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 6px 20px rgba(19,24,40,0.06);max-width:900px;margin:0 auto}
@@ -37,100 +20,101 @@
     .btn-primary{background:#1f6feb;color:#fff;border:none}
     .btn-danger{background:#ff6b6b;color:#fff;border:none}
     @media (max-width:640px){.row{flex-direction:column}}
-  &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;div class=&quot;card&quot;&gt;
-    &lt;h1&gt;Work Hours&lt;/h1&gt;
-    &lt;p class=&quot;muted&quot;&gt;Add shifts (day, date, start &amp; end time, place) and week range&lt;/p&gt;
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Work Hours</h1>
+    <p class="muted">Add shifts (day, date, start & end time, place) and week range</p>
 
-    &lt;div style=&quot;border: 2px solid black;margin-top:8px&quot; class=&quot;row&quot; padding: 8px; style=&quot;align-items:center&quot; &gt;
-      &lt;div style=&quot;flex:1;min-width:170px&quot;&gt;
-        &lt;label for=&quot;weekStart&quot;&gt;Week Start&lt;/label&gt;
-        &lt;input id=&quot;weekStart&quot; type=&quot;date&quot; /&gt;
-      &lt;/div&gt;
-      &lt;div style=&quot;flex:1;min-width:170px&quot;&gt;
-        &lt;label for=&quot;weekEnd&quot;&gt;Week End&lt;/label&gt;
-        &lt;input id=&quot;weekEnd&quot; type=&quot;date&quot; /&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
+    <div class="row" style="align-items:center;margin-top:8px">
+      <div style="flex:1;min-width:170px">
+        <label for="weekStart">Week Start</label>
+        <input id="weekStart" type="date" />
+      </div>
+      <div style="flex:1;min-width:170px">
+        <label for="weekEnd">Week End</label>
+        <input id="weekEnd" type="date" />
+      </div>
+    </div>
 
-    &lt;div class=&quot;row&quot; style=&quot;align-items:center;margin-top:8px&quot;&gt;
-      &lt;div style=&quot;flex:1;min-width:170px; border: 2px solid black&quot;&gt;
-        &lt;label for=&quot;date&quot;&gt;Date&lt;/label&gt;
-        &lt;input id=&quot;date&quot; type=&quot;date&quot; /&gt;
-      &lt;/div&gt;
+    <div class="row" style="align-items:center;margin-top:8px">
+      <div style="flex:1;min-width:170px">
+        <label for="date">Date</label>
+        <input id="date" type="date" />
+      </div>
 
-      &lt;div style=&quot;width:150px; border: 2px solid black&quot;&gt;
-        &lt;label for=&quot;day&quot;&gt;Day&lt;/label&gt;
-        &lt;select id=&quot;day&quot;&gt;
-          &lt;option value=&quot;auto&quot;&gt;(auto from date)&lt;/option&gt;
-          &lt;option&gt;Monday&lt;/option&gt;
-          &lt;option&gt;Tuesday&lt;/option&gt;
-          &lt;option&gt;Wednesday&lt;/option&gt;
-          &lt;option&gt;Thursday&lt;/option&gt;
-          &lt;option&gt;Friday&lt;/option&gt;
-          &lt;option&gt;Saturday&lt;/option&gt;
-          &lt;option&gt;Sunday&lt;/option&gt;
-        &lt;/select&gt;
-      &lt;/div&gt;
-      
-      &lt;div style=&quot;width:140px; border: 2px solid black&quot;&gt;
-        &lt;label for=&quot;start&quot;&gt;Start time&lt;/label&gt;
-        &lt;input id=&quot;start&quot; type=&quot;time&quot; /&gt;
-      &lt;/div&gt;
+      <div style="width:150px">
+        <label for="day">Day</label>
+        <select id="day">
+          <option value="auto">(auto from date)</option>
+          <option>Monday</option>
+          <option>Tuesday</option>
+          <option>Wednesday</option>
+          <option>Thursday</option>
+          <option>Friday</option>
+          <option>Saturday</option>
+          <option>Sunday</option>
+        </select>
+      </div>
 
-      &lt;div style=&quot;width:140px; border: 2px solid black&quot;&gt;
-        &lt;label for=&quot;end&quot;&gt;End time&lt;/label&gt;
-        &lt;input id=&quot;end&quot; type=&quot;time&quot; /&gt;
-      &lt;/div&gt;
+      <div style="width:140px">
+        <label for="start">Start time</label>
+        <input id="start" type="time" />
+      </div>
 
-      &lt;div style=&quot;width:160px; border: 2px solid black&quot;&gt;
-        &lt;label for=&quot;shift&quot;&gt;Shift type&lt;/label&gt;
-        &lt;select id=&quot;shift&quot;&gt;
-          &lt;option&gt;Morning shift&lt;/option&gt;
-          &lt;option&gt;Afternoon shift&lt;/option&gt;
-          &lt;option&gt;Night shift&lt;/option&gt;
-        &lt;/select&gt;
-      &lt;/div&gt;
+      <div style="width:140px">
+        <label for="end">End time</label>
+        <input id="end" type="time" />
+      </div>
 
-      &lt;div style=&quot;width:160px; border: 2px solid black&quot;&gt;
-        &lt;label for=&quot;place&quot;&gt;Place&lt;/label&gt;
-        &lt;select id=&quot;place&quot;&gt;
-          &lt;option&gt;Bakery&lt;/option&gt;
-          &lt;option&gt;Warehouse&lt;/option&gt;
-        &lt;/select&gt;
-      &lt;/div&gt;
+      <div style="width:160px">
+        <label for="shift">Shift type</label>
+        <select id="shift">
+          <option>Morning shift</option>
+          <option>Afternoon shift</option>
+          <option>Night shift</option>
+        </select>
+      </div>
 
-    &lt;/div&gt;
+      <div style="width:160px">
+        <label for="place">Place</label>
+        <select id="place">
+          <option>Bakery</option>
+          <option>Warehouse</option>
+        </select>
+      </div>
 
-    &lt;div class=&quot;actions&quot;&gt;
-      &lt;button id=&quot;add&quot; class=&quot;btn-primary&quot;&gt;Add entry&lt;/button&gt;
-      &lt;button id=&quot;clearAll&quot; class=&quot;btn-danger&quot;&gt;Clear all&lt;/button&gt;
-      &lt;button id=&quot;copy&quot; title=&quot;Copy formatted text&quot;&gt;Copy text&lt;/button&gt;
-    &lt;/div&gt;
+    </div>
 
-    &lt;table id=&quot;entriesTable&quot; style=&quot;display:none&quot;&gt;
-      &lt;thead&gt;
-        &lt;tr&gt;&lt;th&gt;Date&lt;/th&gt;&lt;th&gt;Day&lt;/th&gt;&lt;th&gt;Time&lt;/th&gt;&lt;th&gt;Shift&lt;/th&gt;&lt;th&gt;Place&lt;/th&gt;&lt;th&gt;Hours&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;
-      &lt;/thead&gt;
-      &lt;tbody&gt;&lt;/tbody&gt;
-    &lt;/table&gt;
+    <div class="actions">
+      <button id="add" class="btn-primary">Add entry</button>
+      <button id="clearAll" class="btn-danger">Clear all</button>
+      <button id="copy" title="Copy formatted text">Copy text</button>
+      <button id="download" title="Download as .txt">Download .txt</button>
+    </div>
 
-    &lt;div id=&quot;summary&quot; style=&quot;margin-top:12px;display:none&quot;&gt;
-      &lt;div class=&quot;output&quot; id=&quot;formattedOutput&quot;&gt;&lt;/div&gt;
-    &lt;/div&gt;
+    <table id="entriesTable" style="display:none">
+      <thead>
+        <tr><th>Date</th><th>Day</th><th>Time</th><th>Shift</th><th>Place</th><th>Hours</th><th></th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-  &lt;/div&gt;
+    <div id="summary" style="margin-top:12px;display:none">
+      <div class="output" id="formattedOutput"></div>
+    </div>
 
-  &lt;script&gt;
-    const $ = id =&gt; document.getElementById(id);
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
     let entries = [];
 
     function to12Hour(t) {
       if(!t) return '';
       const [hh, mm] = t.split(':').map(Number);
-      const ampm = hh &gt;= 12 ? 'pm' : 'am';
+      const ampm = hh >= 12 ? 'pm' : 'am';
       const h12 = ((hh + 11) % 12) + 1;
       return h12 + (mm ? ':' + String(mm).padStart(2,'0') : '') + ' ' + ampm;
     }
@@ -140,7 +124,7 @@
       const [eh, em] = end.split(':').map(Number);
       let s = sh * 60 + sm;
       let e = eh * 60 + em;
-      if (e &lt;= s) e += 24 * 60;
+      if (e <= s) e += 24 * 60;
       return e - s;
     }
 
@@ -167,12 +151,12 @@
       $('entriesTable').style.display = '';
 
       let totalMin = 0;
-      entries.forEach((en, idx) =&gt; {
+      entries.forEach((en, idx) => {
         const tr = document.createElement('tr');
         const timeText = `${to12Hour(en.start)} to ${to12Hour(en.end)}`;
         const hrs = en.minutes / 60;
         totalMin += en.minutes;
-        tr.innerHTML = `&lt;td&gt;${en.dateFormatted}&lt;/td&gt;&lt;td&gt;${en.day}&lt;/td&gt;&lt;td&gt;${timeText}&lt;/td&gt;&lt;td&gt;${en.shift}&lt;/td&gt;&lt;td&gt;${en.place}&lt;/td&gt;&lt;td&gt;${hrs}&lt;/td&gt;&lt;td&gt;&lt;button data-idx='${idx}'&gt;Remove&lt;/button&gt;&lt;/td&gt;`;
+        tr.innerHTML = `<td>${en.dateFormatted}</td><td>${en.day}</td><td>${timeText}</td><td>${en.shift}</td><td>${en.place}</td><td>${hrs}</td><td><button data-idx='${idx}'>Remove</button></td>`;
         tbody.appendChild(tr);
       });
 
@@ -182,7 +166,7 @@
       const weekEnd = $('weekEnd').value ? formatDateShort($('weekEnd').value) : 'End';
 
       const lines = [`Week: ${weekStart} - ${weekEnd}`];
-      entries.forEach(en =&gt; {
+      entries.forEach(en => {
         const dayShort = en.day;
         lines.push(`${dayShort} (${en.dateShort}) : ${en.minutes / 60} hours (${to12Hour(en.start)} to ${to12Hour(en.end)}), ${en.shift}, ${en.place}`);
       });
@@ -191,8 +175,8 @@
       lines.push(`\nTotal working hours are ${totalHours} hours.`);
       $('formattedOutput').innerText = lines.join('\n');
 
-      document.querySelectorAll('#entriesTable button[data-idx]').forEach(btn =&gt; {
-        btn.addEventListener('click', e =&gt; {
+      document.querySelectorAll('#entriesTable button[data-idx]').forEach(btn => {
+        btn.addEventListener('click', e => {
           const i = Number(e.target.dataset.idx);
           entries.splice(i,1);
           render();
@@ -200,12 +184,12 @@
       });
     }
 
-    $('date').addEventListener('change', e =&gt; {
+    $('date').addEventListener('change', e => {
       const v = e.target.value;
       if (!v) return;
       if ($('day').value === 'auto' || $('day').value === '') {
         const dayName = getDayNameFromDate(v);
-        const opt = Array.from($('day').options).find(o =&gt; o.value === dayName);
+        const opt = Array.from($('day').options).find(o => o.value === dayName);
         if(opt) $('day').value = dayName; else {
           const extra = document.createElement('option');
           extra.text = dayName; extra.value = dayName; extra.selected = true;
@@ -214,7 +198,7 @@
       }
     });
 
-    $('add').addEventListener('click', () =&gt; {
+    $('add').addEventListener('click', () => {
       const date = $('date').value;
       const start = $('start').value;
       const end = $('end').value;
@@ -241,29 +225,27 @@
       render();
     });
 
-    $('clearAll').addEventListener('click', () =&gt; {
+    $('clearAll').addEventListener('click', () => {
       if (!confirm('Clear all entries?')) return;
       entries = [];
       render();
     });
 
-    $('copy').addEventListener('click', async () =&gt; {
+    $('copy').addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText($('formattedOutput').innerText);
         alert('Copied to clipboard');
       } catch (e) {
-        alert('Copy failed â select and Ctrl+C');
+        alert('Copy failed — select and Ctrl+C');
       }
     });
 
-    $('download').addEventListener('click', () =&gt; {
+    $('download').addEventListener('click', () => {
       const blob = new Blob([$('formattedOutput').innerText], {type: 'text/plain'});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href = url; a.download = 'work-hours.txt'; a.click(); URL.revokeObjectURL(url);
     });
-  &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</pre>
+  </script>
 </body>
 </html>
+
