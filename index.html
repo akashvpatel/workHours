@@ -1,148 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Work Hours Tracker</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 15px;
-      background: #f8f9fa;
-    }
-    h2 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 15px;
-    }
-    .form-container {
-      max-width: 600px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    label {
-      display: block;
-      margin: 10px 0 5px;
-      font-weight: bold;
-      color: #555;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-    button {
-      background: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    .output {
-      margin-top: 20px;
-      padding: 15px;
-      background: #e9ecef;
-      border-radius: 8px;
-      font-size: 15px;
-      line-height: 1.5;
-    }
-    /* Make layout mobile responsive */
-    @media (max-width: 600px) {
-      body {
-        padding: 10px;
-      }
-      input, select, button {
-        font-size: 14px;
-        padding: 10px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work Hours Tracker</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 15px;
+    background: #f8f9fa;
+  }
+  h2 { text-align: center; color: #333; margin-bottom: 15px; }
+  .form-container {
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  label { display: block; margin: 10px 0 5px; font-weight: bold; color: #555; }
+  input, select, button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  button {
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  button:hover { background: #0056b3; }
+  .output {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e9ecef;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  @media (max-width: 600px) {
+    body { padding: 10px; }
+    input, select, button { font-size: 14px; padding: 10px; }
+  }
+</style>
 </head>
 <body>
-  <div class="form-container">
-    <h2>Work Hours Tracker</h2>
-    <form id="hoursForm">
-      <label for="weekStart">Week Start Date</label>
-      <input type="date" id="weekStart" required>
+<div class="form-container">
+  <h2>Work Hours Tracker</h2>
+  <form id="hoursForm">
+    <label for="weekStart">Week Start Date</label>
+    <input type="date" id="weekStart" required>
 
-      <label for="weekEnd">Week End Date</label>
-      <input type="date" id="weekEnd" required>
+    <label for="weekEnd">Week End Date</label>
+    <input type="date" id="weekEnd" required>
 
-      <label for="day">Day</label>
-      <select id="day" required>
-        <option value="">Select Day</option>
-        <option>Monday</option>
-        <option>Tuesday</option>
-        <option>Wednesday</option>
-        <option>Thursday</option>
-        <option>Friday</option>
-        <option>Saturday</option>
-        <option>Sunday</option>
-      </select>
+    <label for="day">Day</label>
+    <select id="day" required>
+      <option value="">Select Day</option>
+      <option>Monday</option>
+      <option>Tuesday</option>
+      <option>Wednesday</option>
+      <option>Thursday</option>
+      <option>Friday</option>
+      <option>Saturday</option>
+      <option>Sunday</option>
+    </select>
 
-      <label for="date">Date</label>
-      <input type="date" id="date" required>
+    <label for="date">Date</label>
+    <input type="date" id="date" required>
 
-      <label for="hours">Hours Worked</label>
-      <input type="number" id="hours" min="1" required>
+    <label for="startTime">Start Time</label>
+    <input type="time" id="startTime" required>
 
-      <label for="shift">Shift</label>
-      <input type="text" id="shift" placeholder="e.g., 7 am to 3 pm">
+    <label for="endTime">End Time</label>
+    <input type="time" id="endTime" required>
 
-      <label for="location">Location</label>
-      <select id="location" required>
-        <option value="">Select Location</option>
-        <option>Bakery</option>
-        <option>Warehouse</option>
-      </select>
+    <label for="location">Location</label>
+    <select id="location" required>
+      <option value="">Select Location</option>
+      <option>Bakery</option>
+      <option>Warehouse</option>
+    </select>
 
-      <button type="button" onclick="addEntry()">Add Entry</button>
-    </form>
+    <button type="button" onclick="addEntry()">Add Entry</button>
+  </form>
 
-    <div class="output" id="output">
-      <strong>Summary will appear here...</strong>
-    </div>
-  </div>
+  <div class="output" id="output"><strong>Summary will appear here...</strong></div>
+</div>
 
-  <script>
-    let entries = [];
+<script>
+let entries = JSON.parse(localStorage.getItem('workEntries')) || [];
 
-    function addEntry() {
-      const weekStart = document.getElementById('weekStart').value;
-      const weekEnd = document.getElementById('weekEnd').value;
-      const day = document.getElementById('day').value;
-      const date = document.getElementById('date').value;
-      const hours = document.getElementById('hours').value;
-      const shift = document.getElementById('shift').value;
-      const location = document.getElementById('location').value;
+function calculateHours(start, end) {
+  const [sh, sm] = start.split(':').map(Number);
+  const [eh, em] = end.split(':').map(Number);
+  let minutesStart = sh * 60 + sm;
+  let minutesEnd = eh * 60 + em;
+  if(minutesEnd <= minutesStart) minutesEnd += 24*60; // handle overnight
+  return (minutesEnd - minutesStart)/60;
+}
 
-      if (!weekStart || !weekEnd || !day || !date || !hours || !shift || !location) {
-        alert("Please fill all fields.");
-        return;
-      }
+function renderSummary() {
+  if(entries.length === 0) {
+    document.getElementById('output').innerHTML = '<strong>Summary will appear here...</strong>';
+    return;
+  }
 
-      entries.push({ day, date, hours, shift, location });
+  const weekStart = document.getElementById('weekStart').value;
+  const weekEnd = document.getElementById('weekEnd').value;
+  let totalHours = 0;
+  let summary = `<strong>Week: ${weekStart} - ${weekEnd}</strong><br>`;
 
-      let totalHours = entries.reduce((sum, entry) => sum + parseFloat(entry.hours), 0);
+  entries.forEach(e => {
+    summary += `${e.day} (${e.date}): ${e.hours.toFixed(2)} hours (${e.start} to ${e.end}), ${e.location}<br>`;
+    totalHours += e.hours;
+  });
 
-      let summary = `<strong>Week: ${weekStart} - ${weekEnd}</strong><br>`;
-      entries.forEach(e => {
-        summary += `${e.day} (${e.date}): ${e.hours} hours (${e.shift}), ${e.location}<br>`;
-      });
-      summary += `<br><strong>Total working hours: ${totalHours}</strong>`;
+  summary += `<br><strong>Total working hours: ${totalHours.toFixed(2)}</strong>`;
+  document.getElementById('output').innerHTML = summary;
 
-      document.getElementById('output').innerHTML = summary;
-      document.getElementById('hoursForm').reset();
-    }
-  </script>
+  // save to localStorage
+  localStorage.setItem('workEntries', JSON.stringify(entries));
+}
+
+function addEntry() {
+  const weekStart = document.getElementById('weekStart').value;
+  const weekEnd = document.getElementById('weekEnd').value;
+  const day = document.getElementById('day').value;
+  const date = document.getElementById('date').value;
+  const start = document.getElementById('startTime').value;
+  const end = document.getElementById('endTime').value;
+  const location = document.getElementById('location').value;
+
+  if(!weekStart || !weekEnd || !day || !date || !start || !end || !location){
+    alert("Please fill all fields.");
+    return;
+  }
+
+  const hours = calculateHours(start, end);
+  entries.push({day, date, start, end, hours, location});
+  renderSummary();
+  document.getElementById('hoursForm').reset();
+}
+
+// render saved entries on page load
+renderSummary();
+</script>
 </body>
 </html>
