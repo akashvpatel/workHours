@@ -5,17 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shift Log Tracker</title>
 <style>
-body { font-family: Arial, sans-serif; margin: 20px; background: #f4f7fa; }
-.card { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-h2 { text-align: center; }
-label { display: block; margin-top: 10px; font-weight: bold; }
-input, select, button { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; }
+body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f0f2f5; }
+.card { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+h2 { text-align: center; color: #333; }
+label { display: block; margin-top: 10px; font-weight: 600; color: #555; }
+input, select, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px; box-sizing: border-box; }
 .row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
-.row > div { flex: 1; }
-button { background: #007bff; color: #fff; border: none; cursor: pointer; }
-button:hover { background: #0056b3; }
-#message { background: #f9f9f9; padding: 10px; border-radius: 5px; border: 1px solid #ccc; white-space: pre-line; margin-top: 10px; }
-ul { margin-top: 10px; }
+.row > div { flex: 1; min-width: 100px; }
+button { background: #28a745; color: #fff; border: none; cursor: pointer; font-weight: 600; transition: 0.2s; }
+button:hover { background: #218838; }
+#message { background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #ddd; white-space: pre-line; margin-top: 15px; max-height: 400px; overflow-y: auto; }
+.entry-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; padding: 5px 0; border-bottom: 1px solid #eee; }
+.entry-text { flex: 1; word-break: break-word; }
+.entry-item button { background: #dc3545; margin-left: 10px; font-size: 13px; padding: 5px 10px; }
+.entry-item button:hover { background: #c82333; }
+@media (max-width: 480px) {
+  .row { flex-direction: column; }
+  input, select, button { font-size: 14px; }
+}
 </style>
 </head>
 <body>
@@ -81,14 +88,22 @@ ul { margin-top: 10px; }
 
 <script>
 let entries = [];
+let weekStart = '';
+let weekEnd = '';
+
+function formatDateDisplay(dateStr) {
+  const d = new Date(dateStr);
+  const day = d.getDate();
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const month = monthNames[d.getMonth()];
+  return `${day} ${month}`;
+}
 
 function saveWeek() {
-  const start = document.getElementById('weekStart').value;
-  const end = document.getElementById('weekEnd').value;
-  if (!start || !end) { alert('Select both week start and end dates.'); return; }
-  localStorage.setItem('weekStart', start);
-  localStorage.setItem('weekEnd', end);
-  alert(`Week saved: ${start} to ${end}`);
+  weekStart = document.getElementById('weekStart').value;
+  weekEnd = document.getElementById('weekEnd').value;
+  if (!weekStart || !weekEnd) { alert('Select both week start and end dates.'); return; }
+  alert(`Week saved: ${formatDateDisplay(weekStart)} - ${formatDateDisplay(weekEnd)}`);
 }
 
 function addEntry() {
@@ -100,43 +115,76 @@ function addEntry() {
 
   if (!shiftDate || !shiftStart || !shiftEnd || !location) { alert('Fill all fields.'); return; }
 
-  const entry = `${day} (${shiftDate}): ${shiftStart} - ${shiftEnd}, ${location}`;
-  entries.push(entry);
+  const startHour = parseInt(shiftStart.split(':')[0]);
+  const startMin = shiftStart.split(':')[1];
+  const endHour = parseInt(shiftEnd.split(':')[0]);
+  const endMin = shiftEnd.split(':')[1];
+
+  const startAmPm = startHour >= 12 ? 'PM' : 'AM';
+  const startHour12 = startHour % 12 === 0 ? 12 : startHour % 12;
+  const endAmPm = endHour >= 12 ? 'PM' : 'AM';
+  const endHour12 = endHour % 12 === 0 ? 12 : endHour % 12;
+
+  let sh = startHour12 + (startAmPm === 'PM' && startHour12 !== 12 ? 12 : 0);
+  let eh = endHour12 + (endAmPm === 'PM' && endHour12 !== 12 ? 12 : 0);
+  let workedHours = eh - sh;
+  if(workedHours < 0) workedHours += 24;
+
+  const shiftType = shiftStart >= '07:00' && shiftStart<'12:00' ? 'Morning' : shiftStart<'18:00' ? 'Afternoon':'Night';
+
+  entries.push({
+    id: Date.now(),
+    date: shiftDate,
+    text: `${day} (${formatDateDisplay(shiftDate)}) : ${workedHours} hours (${startHour12} ${startAmPm} to ${endHour12} ${endAmPm}), (${shiftType} shift, ${location})`,
+    hours: workedHours
+  });
   updateMessage();
 }
 
 function updateMessage() {
-  if (entries.length === 0) document.getElementById('message').innerText = 'No entries yet.';
-  else document.getElementById('message').innerHTML = '<ul><li>' + entries.join('</li><li>') + '</li></ul>';
+  const messageDiv = document.getElementById('message');
+  if (entries.length === 0) {
+    messageDiv.innerHTML = 'No entries yet.';
+    return;
+  }
+
+  let totalHours = 0;
+  entries.sort((a,b)=> new Date(a.date)-new Date(b.date));
+
+  let html = `<p>Week: ${formatDateDisplay(weekStart)} - ${formatDateDisplay(weekEnd)} working hours</p>`;
+  entries.forEach(e => {
+    totalHours += e.hours;
+    html += `<div class='entry-item'><span class='entry-text'>• ${e.text}</span> <button onclick='removeEntry(${e.id})'>Remove</button></div>`;
+  });
+  html += `<p>Total working hours are ${totalHours} hours.</p>`;
+  messageDiv.innerHTML = html;
+}
+
+function removeEntry(id) {
+  entries = entries.filter(e=>e.id !== id);
+  updateMessage();
 }
 
 function clearEntries() {
   if (!confirm('Clear all entries?')) return;
   entries = [];
+  weekStart = '';
+  weekEnd = '';
+  document.getElementById('weekStart').value='';
+  document.getElementById('weekEnd').value='';
   updateMessage();
-  localStorage.removeItem('weekStart');
-  localStorage.removeItem('weekEnd');
 }
 
 function copyMessage() {
-  const text = entries.join('\n');
+  const text = document.getElementById('message').innerText;
   navigator.clipboard.writeText(text).then(()=> alert('Summary copied to clipboard!'));
 }
 
-// Auto-select day when shiftDate changes
 document.getElementById('shiftDate').addEventListener('change', function() {
   const d = new Date(this.value);
   const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   document.getElementById('daySelect').value = days[d.getDay()];
 });
-
-// Load saved week on start
-window.onload = () => {
-  const start = localStorage.getItem('weekStart');
-  const end = localStorage.getItem('weekEnd');
-  if (start) document.getElementById('weekStart').value = start;
-  if (end) document.getElementById('weekEnd').value = end;
-};
 </script>
 </body>
 </html>
