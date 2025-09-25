@@ -38,7 +38,7 @@ button:hover { background: #218838; }
   </div>
   <div>
     <label for="weekEnd">Week End (Sunday)</label>
-    <input type="date" id="weekEnd">
+    <input type="date" id="weekEnd" readonly>
   </div>
 </div>
 <button onclick="saveWeek()">Save Week</button>
@@ -107,8 +107,13 @@ function formatDateDisplay(dateStr) {
 
 function saveWeek() {
   weekStart = document.getElementById('weekStart').value;
-  weekEnd = document.getElementById('weekEnd').value;
-  if (!weekStart || !weekEnd) { alert('Select both week start and end dates.'); return; }
+  if (!weekStart) { alert('Select week start date.'); return; }
+  const startDate = new Date(weekStart);
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 6);
+  weekEnd = endDate.toISOString().split('T')[0];
+  document.getElementById('weekEnd').value = weekEnd;
+
   localStorage.setItem('weekStart', weekStart);
   localStorage.setItem('weekEnd', weekEnd);
   alert(`Week saved: ${formatDateDisplay(weekStart)} - ${formatDateDisplay(weekEnd)}`);
@@ -193,20 +198,3 @@ function clearEntries() {
 function copyMessage() {
   let text = `Week: ${formatDateDisplay(weekStart)} - ${formatDateDisplay(weekEnd)} working hours\n`;
   entries.sort((a,b)=> new Date(a.date)-new Date(b.date));
-  let totalHours = 0;
-  entries.forEach(e=>{
-    text += `\n• ${e.text}`;
-    totalHours += e.hours;
-  });
-  text += `\n\nTotal working hours are ${totalHours} hours.`;
-  navigator.clipboard.writeText(text).then(()=> alert('Summary copied to clipboard!'));
-}
-
-document.getElementById('shiftDate').addEventListener('change', function() {
-  const d = new Date(this.value);
-  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  document.getElementById('daySelect').value = days[d.getDay()];
-});
-</script>
-</body>
-</html>
