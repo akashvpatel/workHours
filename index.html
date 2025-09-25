@@ -38,7 +38,7 @@ button:hover { background: #218838; }
   </div>
   <div>
     <label for="weekEnd">Week End (Sunday)</label>
-    <input type="date" id="weekEnd" readonly>
+    <input type="date" id="weekEnd">
   </div>
 </div>
 <button onclick="saveWeek()">Save Week</button>
@@ -107,13 +107,8 @@ function formatDateDisplay(dateStr) {
 
 function saveWeek() {
   weekStart = document.getElementById('weekStart').value;
-  if (!weekStart) { alert('Select week start date.'); return; }
-  const startDate = new Date(weekStart);
-  const endDate = new Date(startDate);
-  endDate.setDate(startDate.getDate() + 6);
-  weekEnd = endDate.toISOString().split('T')[0];
-  document.getElementById('weekEnd').value = weekEnd;
-
+  weekEnd = document.getElementById('weekEnd').value;
+  if (!weekStart || !weekEnd) { alert('Select both week start and end dates.'); return; }
   localStorage.setItem('weekStart', weekStart);
   localStorage.setItem('weekEnd', weekEnd);
   alert(`Week saved: ${formatDateDisplay(weekStart)} - ${formatDateDisplay(weekEnd)}`);
@@ -195,6 +190,4 @@ function clearEntries() {
   updateMessage();
 }
 
-function copyMessage() {
-  let text = `Week: ${formatDateDisplay(weekStart)} - ${formatDateDisplay(weekEnd)} working hours\n`;
-  entries.sort((a,b)=> new Date(a.date)-new Date(b.date));
+function copyMessage()
