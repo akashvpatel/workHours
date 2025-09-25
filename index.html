@@ -1,118 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Work Hours Tracker</title>
-  <style>
-    :root{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial;margin:0}
-    body{padding:16px;background:#f6f7fb;color:#111}
-    .card{max-width:760px;margin:0 auto;background:#fff;padding:18px;border-radius:10px;box-shadow:0 6px 20px rgba(19,24,40,0.06)}
-    h1{font-size:20px;margin:0 0 10px}
-    label{font-size:13px;margin-bottom:4px;display:block}
-    .row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-    input,select,button{padding:10px;border-radius:8px;border:1px solid #d7dbe6;background:#fff;font-size:14px}
-    button{cursor:pointer}
-    .btn-primary{background:#1f6feb;color:#fff;border:none}
-    .btn-danger{background:#dc3545;color:#fff;border:none}
-    .btn-success{background:#28a745;color:#fff;border:none}
-    .btn-copy{background:#0275d8;color:#fff;border:none}
-    .muted{color:#556;font-size:13px}
-    #draftArea{margin-top:14px;display:flex;gap:8px;align-items:center}
-    #draftMsg{background:#fff3cd;color:#856404;padding:8px 10px;border-radius:6px;border:1px solid #ffeeba}
-    #summary{margin-top:12px}
-    .entry{background:#f1f5ff;padding:10px;border-radius:8px;margin-bottom:10px}
-    .entry .meta{font-size:13px;color:#333}
-    .entry .remove{background:#ff6b6b;color:#fff;border:none;padding:6px 8px;border-radius:6px;cursor:pointer}
-    .total{margin-top:12px;font-weight:600}
-    @media (max-width:680px){.row{flex-direction:column}#draftArea{flex-direction:column;align-items:stretch}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shift Log Tracker</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; background: #f4f7fa; }
+.card { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+h2 { text-align: center; }
+label { display: block; margin-top: 10px; font-weight: bold; }
+input, select, button { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.row > div { flex: 1; }
+button { background: #007bff; color: #fff; border: none; cursor: pointer; }
+button:hover { background: #0056b3; }
+#message { background: #f9f9f9; padding: 10px; border-radius: 5px; border: 1px solid #ccc; white-space: pre-line; margin-top: 10px; }
+ul { margin-top: 10px; }
+</style>
 </head>
 <body>
-  <div class="card">
-    <h1>Work Hours Tracker</h1>
-    <p class="muted">Set the week once (Mon → Sun). After saving the week, pick date from the 7-day list and add entries. Week stays saved until you clear all.</p>
+<div class="card">
+<h2>Shift Log Tracker</h2>
 
-    <div class="row">
-      <div style="flex:1">
-        <label for="weekStart">Week Start (Monday)</label>
-        <input id="weekStart" type="date" />
-      </div>
-      <div style="flex:1">
-        <label for="weekEnd">Week End (Sunday)</label>
-        <input id="weekEnd" type="date" />
-      </div>
-    </div>
-
-    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
-      <button id="saveWeekBtn" class="btn-success">Save Week</button>
-      <button id="clearAllBtn" class="btn-danger">Clear All Entries & Week</button>
-    </div>
-
-    <hr style="margin:14px 0" />
-
-    <form id="entryForm">
-      <div class="row">
-        <div style="flex:1;min-width:160px">
-          <label for="dateSelect">Date (choose from saved week)</label>
-          <select id="dateSelect"><option value="">-- select date --</option></select>
-        </div>
-        <div style="flex:1;min-width:140px">
-          <label for="daySelect">Day</label>
-          <select id="daySelect">
-            <option>Monday</option>
-            <option>Tuesday</option>
-            <option>Wednesday</option>
-            <option>Thursday</option>
-            <option>Friday</option>
-            <option>Saturday</option>
-            <option>Sunday</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="row">
-        <div style="flex:1;min-width:140px">
-          <label for="shiftSelect">Shift</label>
-          <select id="shiftSelect">
-            <option value="morning">Morning (07:00–15:00)</option>
-            <option value="afternoon">Afternoon (15:00–23:00)</option>
-            <option value="night">Night (23:00–07:00)</option>
-          </select>
-        </div>
-        <div style="flex:1;min-width:120px">
-          <label for="startTime">Start</label>
-          <input id="startTime" type="time" value="07:00" />
-        </div>
-        <div style="flex:1;min-width:120px">
-          <label for="endTime">End</label>
-          <input id="endTime" type="time" value="15:00" />
-        </div>
-      </div>
-
-      <div class="row">
-        <div style="flex:1;min-width:140px">
-          <label for="location">Location</label>
-          <select id="location"><option>Bakery</option><option>Warehouse</option></select>
-        </div>
-      </div>
-
-      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-        <button type="button" id="addEntryBtn" class="btn-primary">Add Entry</button>
-      </div>
-    </form>
-
-    <div id="draftArea">
-      <div id="draftMsg">Draft version</div>
-      <button id="copyBtn" class="btn-copy">Copy Summary</button>
-    </div>
-
-    <div id="summary"></div>
-
+<div class="row">
+  <div>
+    <label for="weekStart">Week Start (Monday)</label>
+    <input type="date" id="weekStart">
   </div>
+  <div>
+    <label for="weekEnd">Week End (Sunday)</label>
+    <input type="date" id="weekEnd">
+  </div>
+</div>
+<button onclick="saveWeek()">Save Week</button>
 
-  <script>
-    // existing JS code stays unchanged
-  </script>
+<div class="row">
+  <div>
+    <label for="shiftDate">Shift Date</label>
+    <input type="date" id="shiftDate">
+  </div>
+  <div>
+    <label for="daySelect">Day</label>
+    <select id="daySelect">
+      <option>Monday</option>
+      <option>Tuesday</option>
+      <option>Wednesday</option>
+      <option>Thursday</option>
+      <option>Friday</option>
+      <option>Saturday</option>
+      <option>Sunday</option>
+    </select>
+  </div>
+</div>
+
+<div class="row">
+  <div>
+    <label for="shiftStart">Shift Start</label>
+    <input type="time" id="shiftStart" value="07:00">
+  </div>
+  <div>
+    <label for="shiftEnd">Shift End</label>
+    <input type="time" id="shiftEnd" value="15:00">
+  </div>
+</div>
+
+<label for="location">Location</label>
+<select id="location">
+  <option>Bakery</option>
+  <option>Warehouse</option>
+</select>
+
+<button onclick="addEntry()">Add Entry</button>
+<button onclick="clearEntries()">Clear All Entries</button>
+
+<h3>Draft version</h3>
+<div id="message">No entries yet.</div>
+<button onclick="copyMessage()">Copy Summary</button>
+
+</div>
+
+<script>
+let entries = [];
+
+function saveWeek() {
+  const start = document.getElementById('weekStart').value;
+  const end = document.getElementById('weekEnd').value;
+  if (!start || !end) { alert('Select both week start and end dates.'); return; }
+  localStorage.setItem('weekStart', start);
+  localStorage.setItem('weekEnd', end);
+  alert(`Week saved: ${start} to ${end}`);
+}
+
+function addEntry() {
+  const shiftDate = document.getElementById('shiftDate').value;
+  const day = document.getElementById('daySelect').value;
+  const shiftStart = document.getElementById('shiftStart').value;
+  const shiftEnd = document.getElementById('shiftEnd').value;
+  const location = document.getElementById('location').value;
+
+  if (!shiftDate || !shiftStart || !shiftEnd || !location) { alert('Fill all fields.'); return; }
+
+  const entry = `${day} (${shiftDate}): ${shiftStart} - ${shiftEnd}, ${location}`;
+  entries.push(entry);
+  updateMessage();
+}
+
+function updateMessage() {
+  if (entries.length === 0) document.getElementById('message').innerText = 'No entries yet.';
+  else document.getElementById('message').innerHTML = '<ul><li>' + entries.join('</li><li>') + '</li></ul>';
+}
+
+function clearEntries() {
+  if (!confirm('Clear all entries?')) return;
+  entries = [];
+  updateMessage();
+  localStorage.removeItem('weekStart');
+  localStorage.removeItem('weekEnd');
+}
+
+function copyMessage() {
+  const text = entries.join('\n');
+  navigator.clipboard.writeText(text).then(()=> alert('Summary copied to clipboard!'));
+}
+
+// Auto-select day when shiftDate changes
+document.getElementById('shiftDate').addEventListener('change', function() {
+  const d = new Date(this.value);
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  document.getElementById('daySelect').value = days[d.getDay()];
+});
+
+// Load saved week on start
+window.onload = () => {
+  const start = localStorage.getItem('weekStart');
+  const end = localStorage.getItem('weekEnd');
+  if (start) document.getElementById('weekStart').value = start;
+  if (end) document.getElementById('weekEnd').value = end;
+};
+</script>
 </body>
 </html>
