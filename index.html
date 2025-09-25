@@ -190,4 +190,23 @@ function clearEntries() {
   updateMessage();
 }
 
-function copyMessage()
+function copyMessage() {
+  let text = `Week: ${formatDateDisplay(weekStart)} - ${formatDateDisplay(weekEnd)} working hours\n`;
+  entries.sort((a,b)=> new Date(a.date)-new Date(b.date));
+  let totalHours = 0;
+  entries.forEach(e=>{
+    text += `\n• ${e.text}`;
+    totalHours += e.hours;
+  });
+  text += `\n\nTotal working hours are ${totalHours} hours.`;
+  navigator.clipboard.writeText(text).then(()=> alert('Summary copied to clipboard!'));
+}
+
+document.getElementById('shiftDate').addEventListener('change', function() {
+  const d = new Date(this.value);
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  document.getElementById('daySelect').value = days[d.getDay()];
+});
+</script>
+</body>
+</html>
