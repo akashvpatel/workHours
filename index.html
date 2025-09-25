@@ -15,13 +15,15 @@ input, select, button { width: 100%; padding: 10px; margin-top: 5px; border-radi
 button { background: #28a745; color: #fff; border: none; cursor: pointer; font-weight: 600; transition: 0.2s; }
 button:hover { background: #218838; }
 #message { background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #ddd; white-space: pre-line; margin-top: 15px; max-height: 400px; overflow-y: auto; }
-.entry-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; padding: 5px 0; border-bottom: 1px solid #eee; }
-.entry-text { flex: 1; word-break: break-word; }
-.entry-item button { background: #dc3545; margin-left: 10px; font-size: 13px; padding: 5px 10px; }
+.entry-item { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; padding: 5px 0; border-bottom: 1px solid #eee; }
+.entry-text { flex: 0 0 80%; word-break: break-word; }
+.entry-item button { flex: 0 0 18%; background: #dc3545; margin-left: 5px; font-size: 12px; padding: 3px 8px; height: auto; }
 .entry-item button:hover { background: #c82333; }
 @media (max-width: 480px) {
   .row { flex-direction: column; }
   input, select, button { font-size: 14px; }
+  .entry-text { flex: 0 0 75%; }
+  .entry-item button { flex: 0 0 20%; }
 }
 </style>
 </head>
@@ -176,7 +178,14 @@ function clearEntries() {
 }
 
 function copyMessage() {
-  const text = document.getElementById('message').innerText;
+  let text = `Week: ${formatDateDisplay(weekStart)} - ${formatDateDisplay(weekEnd)} working hours\n`;
+  entries.sort((a,b)=> new Date(a.date)-new Date(b.date));
+  let totalHours = 0;
+  entries.forEach(e=>{
+    text += `\n• ${e.text}`;
+    totalHours += e.hours;
+  });
+  text += `\n\nTotal working hours are ${totalHours} hours.`;
   navigator.clipboard.writeText(text).then(()=> alert('Summary copied to clipboard!'));
 }
 
