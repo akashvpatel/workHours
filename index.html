@@ -89,9 +89,13 @@ button:hover { background: #218838; }
 </div>
 
 <script>
-let entries = [];
-let weekStart = '';
-let weekEnd = '';
+let entries = JSON.parse(localStorage.getItem('shiftEntries')) || [];
+let weekStart = localStorage.getItem('weekStart') || '';
+let weekEnd = localStorage.getItem('weekEnd') || '';
+
+document.getElementById('weekStart').value = weekStart;
+document.getElementById('weekEnd').value = weekEnd;
+updateMessage();
 
 function formatDateDisplay(dateStr) {
   const d = new Date(dateStr);
@@ -105,7 +109,10 @@ function saveWeek() {
   weekStart = document.getElementById('weekStart').value;
   weekEnd = document.getElementById('weekEnd').value;
   if (!weekStart || !weekEnd) { alert('Select both week start and end dates.'); return; }
+  localStorage.setItem('weekStart', weekStart);
+  localStorage.setItem('weekEnd', weekEnd);
   alert(`Week saved: ${formatDateDisplay(weekStart)} - ${formatDateDisplay(weekEnd)}`);
+  updateMessage();
 }
 
 function addEntry() {
@@ -134,12 +141,14 @@ function addEntry() {
 
   const shiftType = shiftStart >= '07:00' && shiftStart<'12:00' ? 'Morning' : shiftStart<'18:00' ? 'Afternoon':'Night';
 
-  entries.push({
+  const entry = {
     id: Date.now(),
     date: shiftDate,
     text: `${day} (${formatDateDisplay(shiftDate)}) : ${workedHours} hours (${startHour12} ${startAmPm} to ${endHour12} ${endAmPm}), (${shiftType} shift, ${location})`,
     hours: workedHours
-  });
+  };
+  entries.push(entry);
+  localStorage.setItem('shiftEntries', JSON.stringify(entries));
   updateMessage();
 }
 
@@ -164,6 +173,7 @@ function updateMessage() {
 
 function removeEntry(id) {
   entries = entries.filter(e=>e.id !== id);
+  localStorage.setItem('shiftEntries', JSON.stringify(entries));
   updateMessage();
 }
 
@@ -174,6 +184,9 @@ function clearEntries() {
   weekEnd = '';
   document.getElementById('weekStart').value='';
   document.getElementById('weekEnd').value='';
+  localStorage.removeItem('shiftEntries');
+  localStorage.removeItem('weekStart');
+  localStorage.removeItem('weekEnd');
   updateMessage();
 }
 
