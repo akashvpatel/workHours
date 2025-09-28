@@ -98,7 +98,7 @@ document.getElementById('weekEnd').value = weekEnd;
 updateMessage();
 
 function formatDateDisplay(dateStr) {
-  const d = new Date(dateStr);
+  const d = new Date(dateStr + 'T00:00:00'); // Fix timezone shift
   const day = d.getDate();
   const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const month = monthNames[d.getMonth()];
@@ -125,18 +125,14 @@ function addEntry() {
   if (!shiftDate || !shiftStart || !shiftEnd || !location) { alert('Fill all fields.'); return; }
 
   const startHour = parseInt(shiftStart.split(':')[0]);
-  const startMin = shiftStart.split(':')[1];
   const endHour = parseInt(shiftEnd.split(':')[0]);
-  const endMin = shiftEnd.split(':')[1];
 
   const startAmPm = startHour >= 12 ? 'PM' : 'AM';
   const startHour12 = startHour % 12 === 0 ? 12 : startHour % 12;
   const endAmPm = endHour >= 12 ? 'PM' : 'AM';
   const endHour12 = endHour % 12 === 0 ? 12 : endHour % 12;
 
-  let sh = startHour12 + (startAmPm === 'PM' && startHour12 !== 12 ? 12 : 0);
-  let eh = endHour12 + (endAmPm === 'PM' && endHour12 !== 12 ? 12 : 0);
-  let workedHours = eh - sh;
+  let workedHours = endHour - startHour;
   if(workedHours < 0) workedHours += 24;
 
   const shiftType = shiftStart >= '07:00' && shiftStart<'12:00' ? 'Morning' : shiftStart<'18:00' ? 'Afternoon':'Night';
@@ -203,11 +199,10 @@ function copyMessage() {
 }
 
 document.getElementById('shiftDate').addEventListener('change', function() {
-  const d = new Date(this.value);
+  const d = new Date(this.value + 'T00:00:00'); // Fix timezone shift
   const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   document.getElementById('daySelect').value = days[d.getDay()];
 });
 </script>
 </body>
-  <footer>Created By Akash Patel</footer>
 </html>
