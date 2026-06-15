@@ -146,7 +146,7 @@ function addEntry() {
   entries.push(entry);
   localStorage.setItem('shiftEntries', JSON.stringify(entries));
   updateMessage();
-  fetch("YOUR_WEB_APP_URL", {
+  fetch("https://script.google.com/macros/s/AKfycbwkgj8OqzQOJ1ThvKo7Jn9akmXpZra6s22NvQw10zI58u7QiIiSewp0jUSI8U97vsuAsg/exec", {
   method: "POST",
   body: JSON.stringify({
     date: date,
